@@ -111,8 +111,8 @@ def main(argv):
                 )
             dancers[dancer.email].dance = k.name
 
-    dancers.to_pandas_df().to_csv("matchings_by_dancer.csv")
-    dances.to_pandas_df().to_csv("matchings_by_dance.csv")
+    dancers.to_pandas_df().to_csv("matchings_by_dancer.csv", index=False)
+    dances.to_pandas_df().to_csv("matchings_by_dance.csv", index=False)
 
     log.info("Find matchings by dancer in matchings_by_dancer.csv")
     log.info("Find matchings by dance in matchings_by_dance.csv")

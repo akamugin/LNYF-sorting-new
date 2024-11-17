@@ -21,8 +21,12 @@ class Dances:
         self.dances[dance.name] = dance
 
     def to_pandas_df(self):
-        d = {dance.name: dance.to_pandas_df() for dance in self.dances.values()}
-        return pd.concat(d)
+        dfs = []
+        for dance in self.dances.values():
+            df = dance.to_pandas_df()
+            df.index = [dance.name]  # Set meaningful index
+            dfs.append(df)
+        return pd.concat(dfs, axis=0)
 
 
 class Dance:
@@ -78,11 +82,11 @@ class Dance:
         data = {
             'name': self.name,
             'quota': self.quota,
-            'matchings': self.matchings,
-            'unmatched': self.unmatched,
-            'scores': self.scores,
-            'rankings': self.rankings,
-            'reds': self.reds
+            'matchings': ','.join([dancer.name for dancer in self.matchings]) if self.matchings else '',
+            'unmatched': ','.join([dancer.name for dancer in self.unmatched]) if self.unmatched else '',
+            'scores': ','.join([f"{k}:{v}" for k,v in self.scores.items()]) if self.scores else '',
+            'rankings': ','.join([dancer.name for dancer in self.rankings]) if self.rankings else '',
+            'reds': ','.join([dancer.name for dancer in self.reds]) if self.reds else ''
         }
         return pd.DataFrame([data])
 
