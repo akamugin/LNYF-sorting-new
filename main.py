@@ -96,6 +96,7 @@ def main(argv):
 
     matchings = match_dancers(dancers, dances, False)
 
+    print("Matches created:", dances)
     log.info("Done matching dancers to dances. Generating output files...")
 
     for k, v in matchings.items():

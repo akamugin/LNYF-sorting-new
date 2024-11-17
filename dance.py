@@ -74,35 +74,25 @@ class Dance:
     def get_score(self, dancer_email):
         return self.original_score[dancer_email]
 
-    def to_pandas_df(self, include_unmatched=True):
-        matched_dfs = [
-            x.to_pandas_df(mask=["Dance", "Nonaudition Dances"])
-            for x in self.matchings
-        ]
+    def to_pandas_df(self):
+        data = {
+            'name': self.name,
+            'quota': self.quota,
+            'matchings': self.matchings,
+            'unmatched': self.unmatched,
+            'scores': self.scores,
+            'rankings': self.rankings,
+            'reds': self.reds
+        }
+        return pd.DataFrame([data])
 
-        matched_dfs = pd.concat(matched_dfs)
+    def print_to_pandas_df(self):
+        df = self.to_pandas_df()
+        print("Matched DataFrame:", df)
 
-        d = {'Matched': matched_dfs}
-
-        if include_unmatched and self.unmatched:
-            unmatched_dfs = [
-                x.to_pandas_df(mask=["Dance", "Nonaudition Dances"])
-                for x in self.unmatched
-            ]
-
-            unmatched_dfs = pd.concat(unmatched_dfs)
-
-            d['Unmatched'] = unmatched_dfs
-
-        if self.reds:
-
-            rejected_dfs = [
-                x.to_pandas_df(mask=["Dance", "Nonaudition Dances"])
-                for x in self.reds
-            ]
-
-            rejected_dfs = pd.concat(rejected_dfs)
-
-            d['Rejected'] = rejected_dfs
-
-        return pd.concat(d)
+    def write_to_csv(self):
+        df = self.to_pandas_df()
+        if not df.empty:
+            df.to_csv("matchings_by_dance.csv")
+        else:
+            print("No matches found. No output file generated.")
